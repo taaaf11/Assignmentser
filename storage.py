@@ -29,10 +29,10 @@ class Storage:
         await Storage._instance.set_async(key, value)
 
     @staticmethod
-    async def store_assignment(assignment: Assignment):
-        await Storage._set(Storage._assignments_prefix, assignment)
-
-    @staticmethod
     async def retrieve_assignments() -> list[Assignment]:
         assignments: Optional[Assignment] = await Storage._get(Storage._assignments_prefix)
         return assignments or []
+
+    @staticmethod
+    async def store_assignment(assignment: Assignment):
+        await Storage._set(Storage._assignments_prefix, assignment)
