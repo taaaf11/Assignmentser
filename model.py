@@ -1,12 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class Assignment:
     title: str
     description: str
-
-
-@dataclass
-class Task:
-    description: str
+    tasks: list[str] = field(default_factory=list)
