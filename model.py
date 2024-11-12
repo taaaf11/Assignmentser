@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field, asdict
-from datetime import datetime as dt_class
+from datetime import datetime
 
 from enum import StrEnum, auto
 
@@ -27,7 +27,7 @@ class Task:
 class Assignment:
     title: str
     description: str
-    deadline: dt_class
+    deadline: datetime
     tasks: list[Task] = field(default_factory=list)
 
     def __post_init__(self):
@@ -39,7 +39,7 @@ class Assignment:
 
     @classmethod
     def from_dict(cls, assignment_data: dict):
-        deadline: dt_class = dt_class.fromisoformat(assignment_data.pop('deadline'))
+        deadline: datetime = datetime.fromisoformat(assignment_data.pop('deadline'))
         tasks = [Task.from_dict(task_data) for task_data in assignment_data.pop('tasks')]
 
         return cls(
