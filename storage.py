@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Optional, TYPE_CHECKING
 
+from jinja2.nodes import Assign
+
 from model import Assignment
 
 if TYPE_CHECKING:
@@ -30,9 +32,11 @@ class Storage:
 
     @staticmethod
     async def retrieve_assignments() -> list[Assignment]:
-        assignments: Optional[Assignment] = await Storage._get(Storage._assignments_prefix)
-        return assignments or []
+        assignments_data: Optional[list[dict]] = await Storage._get(Storage._assignments_prefix)
+        if assignments_data is not None:
+            return [Assignment.from_dict(assignment_data) for assignment_data in assignments_data]
+        return []
 
     @staticmethod
     async def store_assignment(assignment: Assignment) -> None:
-        await Storage._set(Storage._assignments_prefix, assignment)
+        await Storage._set(Storage._assignments_prefix, assignment.as_dict())
