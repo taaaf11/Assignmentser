@@ -9,6 +9,10 @@ class Assignment:
     deadline: dt_class
     tasks: list[str] = field(default_factory=list)
 
+    def __post_init__(self):
+        if not self.tasks:
+            self.tasks.append(self.description)
+
     @classmethod
     def from_dict(cls, assignment_data: dict):
         deadline: dt_class = dt_class.fromisoformat(assignment_data.pop('deadline'))
