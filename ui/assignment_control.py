@@ -1,6 +1,11 @@
+from __future__ import annotations
+
+import typing
+
 import flet as ft
 
-from model import Assignment
+if typing.TYPE_CHECKING:
+    from model import Assignment
 
 
 class AssignmentControl(ft.Container):

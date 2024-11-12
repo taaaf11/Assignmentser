@@ -34,5 +34,5 @@ class Storage:
         return assignments or []
 
     @staticmethod
-    async def store_assignment(assignment: Assignment):
+    async def store_assignment(assignment: Assignment) -> None:
         await Storage._set(Storage._assignments_prefix, assignment)
