@@ -29,6 +29,13 @@ class Storage:
         await Storage._instance.set_async(key, value)
 
     @staticmethod
+    async def retrieve_assignment(id: int):
+        stored = await Storage.retrieve_assignments()
+        for assignment in stored:
+            if assignment.id == id:
+                return assignment
+
+    @staticmethod
     async def retrieve_assignments() -> list[Assignment]:
         assignments_data: Optional[list[dict]] = await Storage._get(Storage._assignments_prefix)
         if assignments_data is not None:
