@@ -25,6 +25,7 @@ class Task:
 
 @dataclass
 class Assignment:
+    id: int
     title: str
     description: str
     deadline: datetime

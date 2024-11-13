@@ -23,7 +23,10 @@ class AssignmentCreateControl(ft.Container):
                 # deadline
                 ft.Text("Deadline:"),
                 deadline_textfield := ft.TextField(read_only=True, width=300),
-                ft.IconButton(ft.icons.DATE_RANGE, on_click=lambda _: self.page.open(ft.DatePicker(on_change=self.set_deadline_date)))
+                ft.IconButton(
+                    ft.icons.DATE_RANGE,
+                    on_click=lambda _: self.page.open(ft.DatePicker(on_change=self.set_deadline_date))
+                )
             ],
             tight=True,
         )
@@ -51,6 +54,7 @@ class AssignmentCreateControl(ft.Container):
             return
 
         assignment = Assignment(
+            id=await Storage.get_new_assignment_id(),
             title=self.title_textfield.value,
             description=self.description_textfield.value,
             deadline=self.deadline_value,

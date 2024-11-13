@@ -43,5 +43,13 @@ class Storage:
         await Storage._set(Storage._assignments_prefix, stored)
 
     @staticmethod
+    async def get_new_assignment_id() -> None:
+        stored = await Storage.retrieve_assignments()
+        if not stored:
+            return 1
+        else:
+            return len(stored) + 1
+
+    @staticmethod
     async def clear_data() -> None:
         await Storage._instance.remove_async(Storage._assignments_prefix)
