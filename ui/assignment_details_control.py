@@ -8,6 +8,7 @@ class AssignmentDetailsControl(ft.Container):
     def __init__(self, assignment: Assignment, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.assignment = assignment
         self.content = ft.Column(
             [
                 ft.Text(
@@ -42,10 +43,20 @@ class AssignmentDetailsControl(ft.Container):
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
                 ft.Container(height=20),
-                [
-                    ft.Checkbox(task.description)
-                    for task in assignment.tasks
-                ] if not (assignment.tasks[0].description == assignment.description) else ft.Container()
+                self._build_tasks_controls()
             ],
-            tight=True,
+            # tight=True,
         )
+
+    def _build_tasks_controls(self):
+        tasks = self.assignment.tasks
+        if len(tasks) > 1:
+            return [
+                ft.Text('Tasks:', font_family='Open-Sans', weight=ft.FontWeight.W_400),
+                *[
+                    ft.Checkbox(task.description)
+                    for task in tasks
+                ],
+            ]
+        else:
+            return ft.Container()
