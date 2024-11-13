@@ -23,24 +23,17 @@ async def main(page: ft.Page):
         page.open(dialog)
 
 
+    page.scroll = ft.ScrollMode.AUTO
+
     page.fonts = {
         'Comfortaa': 'assets/fonts/Comfortaa-VariableFont_wght.ttf',
         'Open-Sans': 'assets/fonts/OpenSans-VariableFont_wdth,wght.ttf',
     }
 
-    # assignments_list = AssignmentsListControl(await Storage.retrieve_assignments(), page)
-
     assignments = await Storage.retrieve_assignments()
-
     page.floating_action_button = ft.FloatingActionButton(icon=ft.icons.ADD, on_click=show_assignment_create_dialog)
-
     page.assignments_list = AssignmentsListControl(assignments)
-
     page.add(page.assignments_list)
-
-    page.on_route_change = handle_route_change
-    page.on_view_pop = view_pop
-    page.go(page.route)
 
 
 ft.app(main)

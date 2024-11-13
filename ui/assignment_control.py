@@ -6,6 +6,7 @@ import flet as ft
 import humanize
 
 from storage import Storage
+from ui.assignment_details_control import AssignmentDetailsControl
 from utils import calculate_completed_tasks_quotient, calculate_completed_tasks_quotient_line
 
 if typing.TYPE_CHECKING:
@@ -48,6 +49,8 @@ class AssignmentControl(ft.Container):
                 ft.Text(assignment.description, weight=ft.FontWeight.W_300)
             ]
         )
+
+        self.on_click = lambda _: self.page.open(ft.AlertDialog(content=AssignmentDetailsControl(self.assignment)))
 
         # borders
         self.border = ft.border.all(3, ft.colors.WHITE)

@@ -10,33 +10,42 @@ class AssignmentDetailsControl(ft.Container):
 
         self.content = ft.Column(
             [
-                ft.Text(assignment.title),
-                ft.Text(assignment.description),
-                # ft.ProgressBar(value=calculate_completed_tasks_quotient(assignment)),
-                ft.Row(
-                    [
-                        ft.Column(
-                            [
-                                ft.ProgressBar(
-                                    value=calculate_completed_tasks_quotient(assignment),
-                                    # value=1/6,
-                                    width=430,
-                                    color=ft.colors.WHITE,
-                                    bgcolor=ft.colors.GREY,
-                                ),
-                                ft.Text(
-                                    f"{calculate_completed_tasks_quotient(assignment) * 100}% done"
-                                ),
-                            ],
-                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                        )
-                    ],
-                    # width=50,
-                    alignment=ft.MainAxisAlignment.CENTER,
+                ft.Text(
+                    assignment.title,
+                    font_family='Open-Sans',
+                    size=25,
+                    weight=ft.FontWeight.W_900,
                 ),
-                *[
+                ft.Text(
+                    assignment.description,
+                    font_family='Open-Sans',
+                    size=19,
+                    weight=ft.FontWeight.W_500,
+                ),
+                ft.Container(height=20),
+                ft.Column(
+                    [
+                        ft.Container(
+                            ft.ProgressBar(
+                                value=calculate_completed_tasks_quotient(assignment),
+                                # value=1/6,
+                                width=160,
+                                color=ft.colors.WHITE,
+                                bgcolor=ft.colors.GREY,
+                            ),
+                            alignment=ft.alignment.center,
+                        ),
+                        ft.Text(
+                            f"{calculate_completed_tasks_quotient(assignment) * 100}% done"
+                        ),
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                ),
+                ft.Container(height=20),
+                [
                     ft.Checkbox(task.description)
                     for task in assignment.tasks
-                ]
-            ]
+                ] if not (assignment.tasks[0].description == assignment.description) else ft.Container()
+            ],
+            tight=True,
         )
