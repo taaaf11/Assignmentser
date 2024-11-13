@@ -12,26 +12,18 @@ class AssignmentCreateControl(ft.Container):
 
         self.content = ft.Column(
             [
-                ft.Row(
-                    [
-                        ft.Text("Title:"),
-                        title_textfield := ft.TextField(border=ft.InputBorder.UNDERLINE, border_color=ft.colors.WHITE10, width=100),
-                    ],
-                ),
-                ft.Row(
-                    [
-                        ft.Text("Description:"),
-                        description_textfield := ft.TextField(border=ft.InputBorder.UNDERLINE, border_color=ft.colors.WHITE10, width=100),
-                    ]
-                ),
-                ft.Row(
-                    [
-                        ft.Text("Deadline:"),
-                        deadline_textfield := ft.TextField(border=ft.InputBorder.UNDERLINE, border_color=ft.colors.WHITE10, read_only=True, width=100),
-                        ft.IconButton(ft.icons.DATE_RANGE, on_click=lambda _: self.page.open(ft.DatePicker(on_change=self.set_deadline_date)))
-                    ],
-                    expand=False,
-                )
+                # title
+                ft.Text("Title:"),
+                title_textfield := ft.TextField(multiline=True, width=300),
+
+                # description
+                ft.Text("Description:"),
+                description_textfield := ft.TextField(multiline=True, width=300),
+
+                # deadline
+                ft.Text("Deadline:"),
+                deadline_textfield := ft.TextField(read_only=True, width=300),
+                ft.IconButton(ft.icons.DATE_RANGE, on_click=lambda _: self.page.open(ft.DatePicker(on_change=self.set_deadline_date)))
             ],
             tight=True,
         )
@@ -40,6 +32,8 @@ class AssignmentCreateControl(ft.Container):
         self.description_textfield = description_textfield
         self.deadline_textfield = deadline_textfield
         self.deadline_value: datetime | None = None
+
+        self.width = 350
 
     def set_deadline_date(self, e):
         self.deadline_textfield.value = e.control.value.isoformat()
