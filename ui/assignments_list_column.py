@@ -23,5 +23,7 @@ class AssignmentsListControl(ft.Column):
         self.update()
 
     async def reload(self):
-        self.controls = self._prepare_assignment_controls(await Storage.retrieve_assignments())
+        self.controls = self._prepare_assignment_controls(
+            await Storage.retrieve_assignments()
+        )
         self.update()

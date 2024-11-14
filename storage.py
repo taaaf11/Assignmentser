@@ -13,8 +13,9 @@ class Storage:
     A convenience class providing functions for easy
     storage and retrieval of data
     """
+
     _instance: ClientStorage | None = None
-    _assignments_prefix = 'taaaf11-Assignmentser-assignments-data'
+    _assignments_prefix = "taaaf11-Assignmentser-assignments-data"
 
     @staticmethod
     def init(client_storage: ClientStorage):
@@ -37,9 +38,15 @@ class Storage:
 
     @staticmethod
     async def retrieve_assignments() -> list[Assignment]:
-        assignments_data: Optional[list[dict]] = await Storage._get(Storage._assignments_prefix)
+        assignments_data: Optional[list[dict]] = await Storage._get(
+            Storage._assignments_prefix
+        )
         if assignments_data is not None:
-            return [Assignment.from_dict(assignment_data) for assignment_data in assignments_data]
+            print(assignments_data)
+            return [
+                Assignment.from_dict(assignment_data)
+                for assignment_data in assignments_data
+            ]
         return []
 
     @staticmethod
@@ -52,6 +59,18 @@ class Storage:
     @staticmethod
     async def store_assignments(assignments: list[Assignment]) -> None:
         for assignment in assignments:
+            await Storage.store_assignment(assignment)
+        await Storage._clean_duplicate_assignments_data()
+
+    @staticmethod
+    async def _clean_duplicate_assignments_data():
+        stored = await Storage.retrieve_assignments()
+        await Storage.clear_data()
+        seen_ids = []
+        for assignment in stored.copy():
+            if assignment.id in seen_ids:
+                continue
+            seen_ids.append(assignment.id)
             await Storage.store_assignment(assignment)
 
     @staticmethod

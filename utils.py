@@ -14,7 +14,9 @@ def calculate_completed_tasks_quotient(assignment: Assignment) -> float:
     Example: "1 / 6"
     """
 
-    completed_len = len([task for task in assignment.tasks if task.status == TaskStatus.COMPLETED])
+    completed_len = len(
+        [task for task in assignment.tasks if task.status == TaskStatus.COMPLETED]
+    )
     all_len = len(assignment.tasks)
 
     return completed_len / all_len
@@ -26,7 +28,9 @@ def calculate_completed_tasks_quotient_line(assignment: Assignment) -> str:
     Example: "1 / 6 tasks done"
     """
 
-    completed_len = len([task for task in assignment.tasks if task.status == TaskStatus.COMPLETED])
+    completed_len = len(
+        [task for task in assignment.tasks if task.status == TaskStatus.COMPLETED]
+    )
     all_len = len(assignment.tasks)
 
     return f"{completed_len} / {all_len} tasks done"

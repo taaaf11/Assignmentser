@@ -7,7 +7,10 @@ import humanize
 
 from storage import Storage
 from ui.assignment_details_control import AssignmentDetailsControl
-from utils import calculate_completed_tasks_quotient, calculate_completed_tasks_quotient_line
+from utils import (
+    calculate_completed_tasks_quotient,
+    calculate_completed_tasks_quotient_line,
+)
 
 if typing.TYPE_CHECKING:
     from model import Assignment
@@ -28,29 +31,34 @@ class AssignmentControl(ft.Container):
                             height=20,
                             color=ft.colors.WHITE,
                             bgcolor=ft.colors.GREY,
-                            tooltip=ft.Tooltip(calculate_completed_tasks_quotient_line(assignment)),
+                            tooltip=ft.Tooltip(
+                                calculate_completed_tasks_quotient_line(assignment)
+                            ),
                         ),
                         ft.Text(
                             humanize.precisedelta(
                                 assignment.deadline,
                                 suppress=["minutes", "seconds"],
                                 format="%0.0f",
-                            ) + " left",
+                            )
+                            + " left",
                         ),
                         ft.PopupMenuButton(
                             items=[
-                                ft.PopupMenuItem(text='Delete', on_click=self.delete)
+                                ft.PopupMenuItem(text="Delete", on_click=self.delete)
                             ]
                         ),
                     ],
                     alignment=ft.MainAxisAlignment.END,
                 ),
                 ft.Text(assignment.title, weight=ft.FontWeight.BOLD),
-                ft.Text(assignment.description, weight=ft.FontWeight.W_300)
+                ft.Text(assignment.description, weight=ft.FontWeight.W_300),
             ]
         )
 
-        self.on_click = lambda _: self.page.open(ft.AlertDialog(content=AssignmentDetailsControl(self.assignment)))
+        self.on_click = lambda _: self.page.open(
+            ft.AlertDialog(content=AssignmentDetailsControl(self.assignment, self.page))
+        )
 
         # borders
         self.border = ft.border.all(3, ft.colors.WHITE)

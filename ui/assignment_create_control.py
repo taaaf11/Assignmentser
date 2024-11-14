@@ -15,18 +15,18 @@ class AssignmentCreateControl(ft.Container):
                 # title
                 ft.Text("Title:"),
                 title_textfield := ft.TextField(multiline=True, width=300),
-
                 # description
                 ft.Text("Description:"),
                 description_textfield := ft.TextField(multiline=True, width=300),
-
                 # deadline
                 ft.Text("Deadline:"),
                 deadline_textfield := ft.TextField(read_only=True, width=300),
                 ft.IconButton(
                     ft.icons.DATE_RANGE,
-                    on_click=lambda _: self.page.open(ft.DatePicker(on_change=self.set_deadline_date))
-                )
+                    on_click=lambda _: self.page.open(
+                        ft.DatePicker(on_change=self.set_deadline_date)
+                    ),
+                ),
             ],
             tight=True,
         )
@@ -44,10 +44,11 @@ class AssignmentCreateControl(ft.Container):
         self.deadline_textfield.update()
 
     def validate(self):
-        return (len(self.title_textfield.value) and
-                len(self.description_textfield.value) and
-                len(self.deadline_textfield.value)
-                )
+        return (
+            len(self.title_textfield.value)
+            and len(self.description_textfield.value)
+            and len(self.deadline_textfield.value)
+        )
 
     async def get_assignment(self) -> Assignment:
         if not self.validate():

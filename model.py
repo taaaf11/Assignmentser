@@ -16,7 +16,7 @@ class Task:
 
     @classmethod
     def from_dict(cls, task_data: dict):
-        task_status = TaskStatus(task_data.pop('status'))
+        task_status = TaskStatus(task_data.pop("status"))
         return cls(
             **task_data,
             status=task_status,
@@ -40,8 +40,10 @@ class Assignment:
 
     @classmethod
     def from_dict(cls, assignment_data: dict):
-        deadline: datetime = datetime.fromisoformat(assignment_data.pop('deadline'))
-        tasks = [Task.from_dict(task_data) for task_data in assignment_data.pop('tasks')]
+        deadline: datetime = datetime.fromisoformat(assignment_data.pop("deadline"))
+        tasks = [
+            Task.from_dict(task_data) for task_data in assignment_data.pop("tasks")
+        ]
 
         return cls(
             **assignment_data,
@@ -52,5 +54,5 @@ class Assignment:
     def as_dict(self):
         deadline = self.deadline.isoformat()
         self_dict = asdict(self)
-        self_dict.update({'deadline': deadline})
+        self_dict.update({"deadline": deadline})
         return self_dict
