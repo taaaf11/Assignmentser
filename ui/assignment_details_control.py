@@ -1,6 +1,7 @@
 import flet as ft
 
 from model import Assignment
+from ui.task_control import TaskControl
 from utils import calculate_completed_tasks_quotient
 
 
@@ -43,7 +44,7 @@ class AssignmentDetailsControl(ft.Container):
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
                 ft.Container(height=20),
-                self._build_tasks_controls()
+                *self._build_tasks_controls()
             ],
             # tight=True,
         )
@@ -53,10 +54,7 @@ class AssignmentDetailsControl(ft.Container):
         if len(tasks) > 1:
             return [
                 ft.Text('Tasks:', font_family='Open-Sans', weight=ft.FontWeight.W_400),
-                *[
-                    ft.Checkbox(task.description)
-                    for task in tasks
-                ],
+                *[TaskControl(self.assignment, task) for task in tasks]
             ]
         else:
-            return ft.Container()
+            return [ft.Container()]

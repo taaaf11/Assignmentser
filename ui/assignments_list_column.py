@@ -8,11 +8,15 @@ from ui.assignment_control import AssignmentControl
 class AssignmentsListControl(ft.Column):
     def __init__(self, assignments: list[Assignment], *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.assignments = assignments
         self.controls = self._prepare_assignment_controls(assignments)
 
     @staticmethod
     def _prepare_assignment_controls(assignments: list[Assignment]):
         return [AssignmentControl(assignment) for assignment in assignments]
+
+    async def save_assignments(self) -> None:
+        await Storage.store_assignments(self.assignments)
 
     def add(self, assignment_control: AssignmentControl):
         self.controls.append(assignment_control)
