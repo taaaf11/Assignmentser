@@ -94,7 +94,13 @@ class AssignmentDetailsControl(ft.Container):
         self.tasks_column.update()
         self.update_display_values()
 
-    def add_task_control(self, _):
+    async def add_task_control(self, _):
+        try:
+            if self.tasks_column.controls[0].task.description == self.assignment.description:
+                self.tasks_column.controls.pop(0)
+                await Storage.delete_task_from_assignment(self.assignment.id, self.assignment.tasks.pop(0))
+        except IndexError:
+            pass
         self.tasks_column.controls.append(
             TaskControl(
                 self.assignment,

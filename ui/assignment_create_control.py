@@ -2,7 +2,7 @@ from datetime import datetime
 
 import flet as ft
 
-from model import Assignment
+from model import Assignment, Task
 from storage import Storage
 
 
@@ -59,6 +59,7 @@ class AssignmentCreateControl(ft.Container):
             title=self.title_textfield.value,
             description=self.description_textfield.value,
             deadline=self.deadline_value,
+            tasks=[Task(self.description_textfield.value)],
         )
         await Storage.store_assignment(assignment)
         return assignment
