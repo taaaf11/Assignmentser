@@ -20,20 +20,23 @@ class AssignmentControl(ft.Container):
     def __init__(self, assignment: Assignment, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        no_tasks_in_list = len(assignment.tasks) == 0
+
+        completed_tasks_quotient = 0 if no_tasks_in_list else calculate_completed_tasks_quotient(assignment)
+        completed_tasks_quotient_line = '0 / 1 tasks done' if no_tasks_in_list else calculate_completed_tasks_quotient_line(assignment)
+
         self.assignment = assignment
         self.content = ft.Column(
             [
                 ft.Row(
                     [
                         ft.ProgressRing(
-                            value=calculate_completed_tasks_quotient(assignment),
+                            value=completed_tasks_quotient,
                             width=20,
                             height=20,
                             color=ft.colors.WHITE,
                             bgcolor=ft.colors.GREY,
-                            tooltip=ft.Tooltip(
-                                calculate_completed_tasks_quotient_line(assignment)
-                            ),
+                            tooltip=ft.Tooltip(completed_tasks_quotient_line),
                         ),
                         ft.Text(
                             humanize.precisedelta(
