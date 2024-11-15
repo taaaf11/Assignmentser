@@ -31,13 +31,6 @@ class Assignment:
     deadline: datetime
     tasks: list[Task] = field(default_factory=list)
 
-    def __post_init__(self):
-        if len(self.tasks) > 1 and self.tasks[0] == self.description:
-            self.tasks.pop(0)
-
-        if not self.tasks:
-            self.tasks.append(Task(self.description))
-
     @classmethod
     def from_dict(cls, assignment_data: dict):
         deadline: datetime = datetime.fromisoformat(assignment_data.pop("deadline"))
