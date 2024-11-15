@@ -44,10 +44,12 @@ class AssignmentCreateControl(ft.Container):
         self.deadline_textfield.update()
 
     def validate(self):
+        is_deadline_in_future = self.deadline_value > datetime.now()
         return (
             len(self.title_textfield.value)
             and len(self.description_textfield.value)
             and len(self.deadline_textfield.value)
+            and is_deadline_in_future
         )
 
     async def get_assignment(self) -> Assignment:
