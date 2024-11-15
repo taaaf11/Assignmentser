@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Optional, TYPE_CHECKING
 
-from model import Assignment
+from model import Assignment, TaskStatus, Task
 
 if TYPE_CHECKING:
     from flet_core.client_storage import ClientStorage
@@ -42,7 +42,6 @@ class Storage:
             Storage._assignments_prefix
         )
         if assignments_data is not None:
-            print(assignments_data)
             return [
                 Assignment.from_dict(assignment_data)
                 for assignment_data in assignments_data
@@ -61,6 +60,22 @@ class Storage:
         for assignment in assignments:
             await Storage.store_assignment(assignment)
         await Storage._clean_duplicate_assignments_data()
+
+    @staticmethod
+    async def update_task_status(id: int, task: Task, status: TaskStatus):
+        assignment = await Storage.retrieve_assignment(id)
+        await Storage.delete_assignment(id)
+        for task_ in assignment.tasks:
+            if task_.description == task.description:
+                task_.status = status
+        await Storage.store_assignment(assignment)
+
+    @staticmethod
+    async def add_task_to_assignment(id: int, task: Task):
+        assignment = await Storage.retrieve_assignment(id)
+        await Storage.delete_assignment(id)
+        assignment.tasks.append(task)
+        await Storage.store_assignment(assignment)
 
     @staticmethod
     async def _clean_duplicate_assignments_data():
