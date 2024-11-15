@@ -18,19 +18,18 @@ class AssignmentDetailsControl(ft.Container):
             else calculate_completed_tasks_quotient(assignment)
         )
         self.completed_tasks_quotient_progress_bar = ft.ProgressBar(
-            # value=calculate_completed_tasks_quotient(
-            #     assignment
-            # ),
             value=completed_tasks_quotient,
-            # value=1/6,
             width=160,
             color=ft.colors.WHITE,
             bgcolor=ft.colors.GREY,
         )
+        self.completed_tasks_quotient_percentage_text = ft.Text(f"{(completed_tasks_quotient * 100):.0f}% done")
 
         self.tasks_column = ft.Column(
-            TaskControl(assignment, task, self.update_progress_bar)
-            for task in assignment.tasks
+            [TaskControl(assignment, task, self.update_display_values)
+            for task in assignment.tasks],
+            scroll=ft.ScrollMode.ALWAYS,
+            expand=True
         )
         self.content = ft.Stack(
             [
@@ -55,9 +54,7 @@ class AssignmentDetailsControl(ft.Container):
                                     self.completed_tasks_quotient_progress_bar,
                                     alignment=ft.alignment.center,
                                 ),
-                                ft.Text(
-                                    f"{(completed_tasks_quotient * 100):.0f}% done"
-                                ),
+                                self.completed_tasks_quotient_percentage_text,
                             ],
                             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                         ),
@@ -80,35 +77,18 @@ class AssignmentDetailsControl(ft.Container):
         # self.height = page.height - 200
 
     async def add_task_control(self, _):
-        self.tasks_column.controls.append(TaskControl(self.assignment))
+        self.tasks_column.controls.append(TaskControl(self.assignment, on_description_submit=self.update_display_values))
         self.update()
 
-    def _show_task_create_dialog(self, _):
-        async def _save_task(_):
-            self.assignment.tasks.append(Task(task_textfield.value))
-            await Storage.store_assignments([self.assignment])
-
-        self.page.open(
-            ft.AlertDialog(
-                content=ft.Row(
-                    [
-                        ft.Text("Task:"),
-                        task_textfield := ft.TextField(),
-                    ],
-                    tight=True,
-                ),
-                actions=[ft.IconButton(ft.icons.CHECK, on_click=_save_task)],
-            )
-        )
-
-    def update_progress_bar(self):
+    def update_display_values(self):
         completed_tasks_quotient = (
             0
             if len(self.assignment.tasks) == 0
             else calculate_completed_tasks_quotient(self.assignment)
         )
+        self.completed_tasks_quotient_percentage_text.value = f"{completed_tasks_quotient * 100:.0f}% done"
         self.completed_tasks_quotient_progress_bar.value = completed_tasks_quotient
-        self.completed_tasks_quotient_progress_bar.update()
+        self.update()
 
     def _build_tasks_controls(self) -> list[ft.Control]:
         tasks = self.assignment.tasks

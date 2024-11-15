@@ -12,6 +12,7 @@ class TaskControl(ft.Row):
         assignment: Assignment,
         task: Task | None = None,
         on_change: Callable | None = None,
+        on_description_submit: Callable | None = None,
         *args,
         **kwargs,
     ):
@@ -20,6 +21,7 @@ class TaskControl(ft.Row):
         self.assignment = assignment
         self.task = task
         self.on_change = on_change
+        self.on_description_submit = on_description_submit
 
         if task is not None:
             self.check_icon = ft.IconButton(
@@ -47,8 +49,6 @@ class TaskControl(ft.Row):
             self.description_textfield,
             self.description_text_control,
         ]
-        # self.label = task.description
-        self.label = ft.TextField("s")
 
     async def _show_description_text(self, _):
         self.description_text_control.value = self.description_textfield.value
@@ -59,17 +59,10 @@ class TaskControl(ft.Row):
         self.update()
 
     async def add_task(self, _):
-        # print(self.task)
-        # print(await Storage.retrieve_assignments())
-        # self.assignment.tasks[self.assignment.tasks.index(self.task)].status = new_status
-        # await self.page.assignments_list.save_assignments()
-        # self.assignment.tasks.append(
-        #     Task(self.description_text_control.value)
-        # )
-        # await self.page.assignments_list.save_assignments()
         await Storage.add_task_to_assignment(self.assignment.id, self.task)
+        self.assignment.tasks.append(self.task)
+        self.on_description_submit()
         await self.page.assignments_list.reload()
-        ...
 
     async def update_status(self, _):
         new_status: TaskStatus
@@ -83,7 +76,8 @@ class TaskControl(ft.Row):
 
         self.task.status = new_status
         self.check_icon.update()
-        self.on_change()
+        if self.on_change:
+            self.on_change()
 
         await Storage.update_task_status(self.assignment.id, self.task, new_status)
         await self.page.assignments_list.reload()
