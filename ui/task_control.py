@@ -13,6 +13,7 @@ class TaskControl(ft.Row):
         task: Task | None = None,
         on_change: Callable | None = None,
         on_description_submit: Callable | None = None,
+        on_delete: Callable | None = None,
         *args,
         **kwargs,
     ):
@@ -22,6 +23,7 @@ class TaskControl(ft.Row):
         self.task = task
         self.on_change = on_change
         self.on_description_submit = on_description_submit
+        self.on_delete = on_delete
 
         if task is not None:
             self.check_icon = ft.IconButton(
@@ -45,10 +47,19 @@ class TaskControl(ft.Row):
             self.description_text_control = ft.Text(visible=False)
 
         self.controls = [
+            ft.Row([
             self.check_icon,
             self.description_textfield,
             self.description_text_control,
+            ]),
+            # ft.Container(width=self.len_longest_task_description()),
+            ft.IconButton(ft.icons.DELETE_OUTLINE, on_click=self.delete)
         ]
+        self.alignment = ft.MainAxisAlignment.SPACE_BETWEEN
+
+    def len_longest_task_description(self):
+        lengths = (len(task.description) for task in self.assignment.tasks)
+        return max(lengths)
 
     async def _show_description_text(self, _):
         self.description_text_control.value = self.description_textfield.value
@@ -63,6 +74,10 @@ class TaskControl(ft.Row):
         self.assignment.tasks.append(self.task)
         self.on_description_submit()
         await self.page.assignments_list.reload()
+
+    async def delete(self, _):
+        await Storage.delete_task_from_assignment(self.assignment.id, self.task)
+        self.on_delete(self.task)
 
     async def update_status(self, _):
         new_status: TaskStatus

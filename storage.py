@@ -71,10 +71,17 @@ class Storage:
         await Storage.store_assignment(assignment)
 
     @staticmethod
-    async def add_task_to_assignment(id: int, task: Task):
-        assignment = await Storage.retrieve_assignment(id)
-        await Storage.delete_assignment(id)
+    async def add_task_to_assignment(assignment_id: int, task: Task):
+        assignment = await Storage.retrieve_assignment(assignment_id)
+        await Storage.delete_assignment(assignment_id)
         assignment.tasks.append(task)
+        await Storage.store_assignment(assignment)
+
+    @staticmethod
+    async def delete_task_from_assignment(assignment_id: int, task: Task):
+        assignment = await Storage.retrieve_assignment(assignment_id)
+        await Storage.delete_assignment(assignment_id)
+        assignment.tasks.remove(task)
         await Storage.store_assignment(assignment)
 
     @staticmethod

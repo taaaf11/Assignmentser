@@ -26,7 +26,7 @@ class AssignmentDetailsControl(ft.Container):
         self.completed_tasks_quotient_percentage_text = ft.Text(f"{(completed_tasks_quotient * 100):.0f}% done")
 
         self.tasks_column = ft.Column(
-            [TaskControl(assignment, task, self.update_display_values)
+            [TaskControl(assignment, task, self.update_display_values, on_delete=lambda task: self.delete_task(task))
             for task in assignment.tasks],
             scroll=ft.ScrollMode.ALWAYS,
             expand=True
@@ -76,8 +76,17 @@ class AssignmentDetailsControl(ft.Container):
         self.width = page.window.width - 400
         # self.height = page.height - 200
 
-    async def add_task_control(self, _):
-        self.tasks_column.controls.append(TaskControl(self.assignment, on_description_submit=self.update_display_values))
+    def delete_task(self, task: Task):
+        task_control: TaskControl
+        for task_control in self.tasks_column.controls.copy():
+            if task_control.task == task:
+                self.tasks_column.controls.remove(task_control)
+        self.assignment.tasks.remove(task)
+        self.tasks_column.update()
+        self.update_display_values()
+
+    def add_task_control(self, _):
+        self.tasks_column.controls.append(TaskControl(self.assignment, on_change=self.update_display_values, on_description_submit=self.update_display_values, on_delete=self.delete_task))
         self.update()
 
     def update_display_values(self):
