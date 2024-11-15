@@ -30,10 +30,10 @@ class Storage:
         await Storage._instance.set_async(key, value)
 
     @staticmethod
-    async def retrieve_assignment(id: int):
+    async def retrieve_assignment(assignment_id: int):
         stored = await Storage.retrieve_assignments()
         for assignment in stored:
-            if assignment.id == id:
+            if assignment.id == assignment_id:
                 return assignment
 
     @staticmethod
@@ -62,9 +62,9 @@ class Storage:
         await Storage._clean_duplicate_assignments_data()
 
     @staticmethod
-    async def update_task_status(id: int, task: Task, status: TaskStatus):
-        assignment = await Storage.retrieve_assignment(id)
-        await Storage.delete_assignment(id)
+    async def update_task_status(assignment_id: int, task: Task, status: TaskStatus):
+        assignment = await Storage.retrieve_assignment(assignment_id)
+        await Storage.delete_assignment(assignment_id)
         for task_ in assignment.tasks:
             if task_.description == task.description:
                 task_.status = status
@@ -96,10 +96,10 @@ class Storage:
             await Storage.store_assignment(assignment)
 
     @staticmethod
-    async def delete_assignment(id: int):
+    async def delete_assignment(assignment_id: int):
         stored = await Storage.retrieve_assignments()
         for assignment in stored.copy():
-            if assignment.id == id:
+            if assignment.id == assignment_id:
                 stored.remove(assignment)
         await Storage._clear_assignments_data()
         await Storage.store_assignments(stored)
