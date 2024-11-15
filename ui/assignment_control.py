@@ -22,8 +22,14 @@ class AssignmentControl(ft.Container):
 
         no_tasks_in_list = len(assignment.tasks) == 0
 
-        completed_tasks_quotient = 0 if no_tasks_in_list else calculate_completed_tasks_quotient(assignment)
-        completed_tasks_quotient_line = '0 / 1 tasks done' if no_tasks_in_list else calculate_completed_tasks_quotient_line(assignment)
+        completed_tasks_quotient = (
+            0 if no_tasks_in_list else calculate_completed_tasks_quotient(assignment)
+        )
+        completed_tasks_quotient_line = (
+            "0 / 1 tasks done"
+            if no_tasks_in_list
+            else calculate_completed_tasks_quotient_line(assignment)
+        )
 
         self.assignment = assignment
         self.content = ft.Column(

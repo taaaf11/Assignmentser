@@ -12,19 +12,26 @@ class AssignmentDetailsControl(ft.Container):
 
         self.assignment = assignment
 
-        completed_tasks_quotient = 0 if len(assignment.tasks) == 0 else calculate_completed_tasks_quotient(assignment)
+        completed_tasks_quotient = (
+            0
+            if len(assignment.tasks) == 0
+            else calculate_completed_tasks_quotient(assignment)
+        )
         self.completed_tasks_quotient_progress_bar = ft.ProgressBar(
-                                        # value=calculate_completed_tasks_quotient(
-                                        #     assignment
-                                        # ),
-                                        value=completed_tasks_quotient,
-                                        # value=1/6,
-                                        width=160,
-                                        color=ft.colors.WHITE,
-                                        bgcolor=ft.colors.GREY,
-                                    )
+            # value=calculate_completed_tasks_quotient(
+            #     assignment
+            # ),
+            value=completed_tasks_quotient,
+            # value=1/6,
+            width=160,
+            color=ft.colors.WHITE,
+            bgcolor=ft.colors.GREY,
+        )
 
-        self.tasks_column = ft.Column(TaskControl(assignment, task, self.update_progress_bar) for task in assignment.tasks)
+        self.tasks_column = ft.Column(
+            TaskControl(assignment, task, self.update_progress_bar)
+            for task in assignment.tasks
+        )
         self.content = ft.Stack(
             [
                 ft.Column(
@@ -95,7 +102,11 @@ class AssignmentDetailsControl(ft.Container):
         )
 
     def update_progress_bar(self):
-        completed_tasks_quotient = 0 if len(self.assignment.tasks) == 0 else calculate_completed_tasks_quotient(self.assignment)
+        completed_tasks_quotient = (
+            0
+            if len(self.assignment.tasks) == 0
+            else calculate_completed_tasks_quotient(self.assignment)
+        )
         self.completed_tasks_quotient_progress_bar.value = completed_tasks_quotient
         self.completed_tasks_quotient_progress_bar.update()
 

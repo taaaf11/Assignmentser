@@ -8,7 +8,12 @@ from storage import Storage
 
 class TaskControl(ft.Row):
     def __init__(
-        self, assignment: Assignment, task: Task | None = None, on_change: Callable | None = None, *args, **kwargs
+        self,
+        assignment: Assignment,
+        task: Task | None = None,
+        on_change: Callable | None = None,
+        *args,
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
 
@@ -23,14 +28,18 @@ class TaskControl(ft.Row):
                 else ft.icons.CHECK_BOX_OUTLINE_BLANK,
                 on_click=self.update_status,
             )
-            self.description_textfield = ft.TextField(visible=False, on_submit=self._show_description_text)
+            self.description_textfield = ft.TextField(
+                visible=False, on_submit=self._show_description_text
+            )
             self.description_text_control = ft.Text(task.description)
         else:
             self.check_icon = ft.IconButton(
                 ft.icons.CHECK_BOX_OUTLINE_BLANK,
                 on_click=self.update_status,
             )
-            self.description_textfield = ft.TextField(on_submit=self._show_description_text)
+            self.description_textfield = ft.TextField(
+                on_submit=self._show_description_text
+            )
             self.description_text_control = ft.Text(visible=False)
 
         self.controls = [
@@ -78,4 +87,3 @@ class TaskControl(ft.Row):
 
         await Storage.update_task_status(self.assignment.id, self.task, new_status)
         await self.page.assignments_list.reload()
-
