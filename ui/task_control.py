@@ -47,13 +47,15 @@ class TaskControl(ft.Row):
             self.description_text_control = ft.Text(visible=False)
 
         self.controls = [
-            ft.Row([
-            self.check_icon,
-            self.description_textfield,
-            self.description_text_control,
-            ]),
+            ft.Row(
+                [
+                    self.check_icon,
+                    self.description_textfield,
+                    self.description_text_control,
+                ]
+            ),
             # ft.Container(width=self.len_longest_task_description()),
-            ft.IconButton(ft.icons.DELETE_OUTLINE, on_click=self.delete)
+            ft.IconButton(ft.icons.DELETE_OUTLINE, on_click=self.delete),
         ]
         self.alignment = ft.MainAxisAlignment.SPACE_BETWEEN
 
